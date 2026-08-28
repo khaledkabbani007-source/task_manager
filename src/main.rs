@@ -14,8 +14,9 @@ fn main() {
 
         println!("1. Add Task");
         println!("2. View Tasks");
-        println!("3. Delete Task");
-        println!("4. Quit");
+        println!("3. Complete Task");
+        println!("4. Delete Task");
+        println!("5. Quit");
         println!("Choose an option:");
         io::stdin().read_line(&mut choice).unwrap();
 
@@ -42,10 +43,36 @@ fn main() {
         
         for (index, task) in tasks.iter().enumerate()
         {
-            println!("{}. {}", index + 1, task.name);
+            let status = if task.completed { "[✓]" } else { "[ ]" };
+            println!("{}. {} {}", index + 1, status, task.name);
         }
         }
-           "3" => {
+          "3" => {
+              let mut input = String::new();
+
+              println!("Enter task number to complete:");
+              io::stdin().read_line(&mut input).unwrap();
+
+              let number = match input.trim().parse::<usize>() {
+                Ok(number) => number,
+                Err(_) => {
+                    println!("Please enter a number");
+                    continue;
+                }
+              };
+              
+              if number == 0  ||number > tasks.len() {
+                println!("Invalid task number.");
+                continue;
+                }
+                let  index = number - 1;
+                tasks[index].completed = true;
+                print!("Task completed!");
+            
+              
+          }
+
+           "4" => {
     let mut input = String::new();
 
     println!("Enter task number to delete:");
@@ -71,7 +98,7 @@ fn main() {
 
     println!("Task deleted!");
 }
-           "4" => {break;}
+           "5" => {break;}
             _ =>                
              println!("Invalid option"),
         }
