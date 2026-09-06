@@ -1,10 +1,92 @@
+
 use std::io;
 struct Task {
     name: String,
     completed: bool,
 }
 
+
+
+ fn add_task(tasks: &mut Vec<Task>) { 
+
+    
+
+    let mut input = String::new();
+    println!("Enter a task");
+    io::stdin().read_line(&mut input).unwrap();
+    let task = Task {
+        name: input.trim().to_string(),
+        completed: false,
+    };
+    tasks.push(task);
+    println!("Task added!");
+ }
+    
+    fn view_tasks(tasks: &Vec<Task>) {
+       println!("show tasks");
+
+                for (index, task) in tasks.iter().enumerate() {
+                    let status = if task.completed { "[✓]" } else { "[ ]" };
+                    println!("{}. {} {}", index + 1, status, task.name);
+
+    } 
+}
+
+fn complete_task(tasks: &mut Vec<Task>) {
+
+    let mut input = String::new();
+
+                println!("Enter task number to complete:");
+                io::stdin().read_line(&mut input).unwrap();
+
+                let number = match input.trim().parse::<usize>() {
+                    Ok(number) => number,
+                    Err(_) => {
+                        println!("Please enter a number");
+                       return;
+                    }
+                };
+
+                if number == 0 || number > tasks.len() {
+                    println!("Invalid task number.");
+                    return;
+                }
+                let index = number - 1;
+                tasks[index].completed = true;
+                println!("Task completed!");
+}
+
+            fn delete_task(tasks: &mut Vec<Task>) {
+
+                let mut input = String::new();
+
+                println!("Enter task number to delete:");
+
+                io::stdin().read_line(&mut input).unwrap();
+
+                let number = match input.trim().parse::<usize>() {
+                    Ok(number) => number,
+                    Err(_) => {
+                        println!("Please enter a number");
+                        return;
+                    }
+                };
+
+                if number == 0 || number > tasks.len() {
+                    println!("Invalid task number.");
+                    return;
+                }
+                let index = number - 1;
+
+                tasks.remove(index);
+
+                println!("Task deleted!");
+}
+
+
+
 fn main() {
+
     println!("TASK MANAGER");
 
     let mut tasks: Vec<Task> = vec![];
@@ -21,87 +103,25 @@ fn main() {
         io::stdin().read_line(&mut choice).unwrap();
 
         match choice.trim() {
+            "1" => {
+                add_task(&mut tasks);
+            }
 
-            "1" =>{ println!("Add task");
-
-        let mut input = String::new();
-
-        println!("Enter a task");
-
-        io::stdin().read_line(&mut input).unwrap();
-
-        let task = Task {
-            name: input.trim().to_string(),
-            completed: false,
-        };
-        tasks.push(task);
-
-        println!(" Task added!");
-        }
-
-            "2"=> {println!("show tasks");
-        
-        for (index, task) in tasks.iter().enumerate()
-        {
-            let status = if task.completed { "[✓]" } else { "[ ]" };
-            println!("{}. {} {}", index + 1, status, task.name);
-        }
-        }
-          "3" => {
-              let mut input = String::new();
-
-              println!("Enter task number to complete:");
-              io::stdin().read_line(&mut input).unwrap();
-
-              let number = match input.trim().parse::<usize>() {
-                Ok(number) => number,
-                Err(_) => {
-                    println!("Please enter a number");
-                    continue;
-                }
-              };
-              
-              if number == 0  ||number > tasks.len() {
-                println!("Invalid task number.");
-                continue;
-                }
-                let  index = number - 1;
-                tasks[index].completed = true;
-                print!("Task completed!");
+            "2" => {
+               view_tasks(&tasks);
+             }
             
-              
-          }
+            "3" => {
+                complete_task(&mut tasks);
+            }
 
-           "4" => {
-    let mut input = String::new();
-
-    println!("Enter task number to delete:");
-
-    io::stdin().read_line(&mut input).unwrap();
-
-    let number = match input.trim().parse::<usize>() {
-        Ok(number) => number,
-        Err(_) => {
-            println!("Please enter a number");
-            continue;
-        }
-    };
-
-    if number == 0 || number > tasks.len() { 
-
-        println!("Invalid task number.");
-        continue;
-    }
-    let index = number - 1;
-
-    tasks.remove(index);
-
-    println!("Task deleted!");
-}
-           "5" => {break;}
-            _ =>                
-             println!("Invalid option"),
+            "4" => {
+               delete_task(&mut tasks);
+            }
+            "5" => {
+                break;
+            }
+            _ => println!("Invalid option"),
         }
     }
 }
-    
